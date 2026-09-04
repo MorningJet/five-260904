@@ -1,0 +1,164 @@
+.page {
+  width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 8px 16px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  margin-bottom: 12px;
+}
+
+.brand {
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.42em;
+  font-size: 12px;
+  color: var(--cinnabar);
+}
+
+.hero {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  background: #f3ebe0;
+}
+
+.card {
+  background: #fffaf4;
+  border-radius: 18px;
+  padding: 16px 16px 18px;
+  margin-top: 14px;
+}
+
+.card > :first-child {
+  margin-bottom: 12px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.price {
+  margin: 0;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 26px;
+  color: var(--cinnabar);
+}
+
+.lead,
+.body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+
+.lead {
+  margin-top: 12px;
+}
+
+.heading {
+  margin: 16px 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+}
+
+.card > .heading:first-child {
+  margin-top: 0;
+}
+
+.specList {
+  margin: 0;
+}
+
+.specRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.specRow:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.specRow dt {
+  flex-shrink: 0;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+}
+
+.specRow dd {
+  margin: 0;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.buyWrap {
+  position: sticky;
+  bottom: 0;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 10px;
+  margin-top: auto;
+  padding: 14px 0 6px;
+  background: linear-gradient(to top, var(--paper) 62%, rgba(239, 228, 210, 0.88));
+}
+
+.buy,
+.back {
+  width: 100%;
+  border: 0;
+  height: 46px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.buy {
+  background: var(--cinnabar);
+  color: #fbf6ec;
+}
+
+.back {
+  background: #efe4d2;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.toastLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.toast {
+  margin: 0;
+  max-width: calc(100% - 48px);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(42, 34, 24, 0.82);
+  color: #fbf6ec;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-align: center;
+}

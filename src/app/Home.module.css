@@ -1,0 +1,179 @@
+.shell {
+  width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 18px 16px 64px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.brand {
+  margin: 0;
+  letter-spacing: 0.42em;
+  font-size: 12px;
+  color: var(--cinnabar);
+}
+
+.hero h1 {
+  margin: 8px 0 0;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.empty {
+  background: var(--card);
+  border: 1px dashed var(--gold);
+  border-radius: 16px;
+  padding: 28px 12px;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.empty button,
+.pop button {
+  border: 0;
+  background: var(--cinnabar);
+  color: #fbf6ec;
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.card {
+  background: #fffaf4;
+  border: 0;
+  border-radius: 18px;
+  padding: 16px 16px 14px;
+  margin-bottom: 14px;
+}
+
+.plain {
+  background: #fffaf4;
+  border: 0;
+  border-radius: 18px;
+  padding: 16px 12px 28px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.ornamentHead {
+  position: relative;
+  margin-bottom: 2px;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardHead h2 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+
+.edit {
+  border: 0;
+  background: #f0a05a;
+  color: #3b2412;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.q {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.solar {
+  margin: 10px 0 0;
+  font-size: 18px;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  line-height: 1.45;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.attr {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.attr span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+}
+
+.attr strong {
+  display: block;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 34, 24, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 30;
+}
+
+.pop {
+  width: min(360px, 100%);
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px 20px 16px;
+  border: 1px solid var(--line);
+}
+
+.pop h3 {
+  margin: 0;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.pop p {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pop button {
+  width: 100%;
+}

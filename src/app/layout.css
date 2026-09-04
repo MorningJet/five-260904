@@ -1,0 +1,44 @@
+:root {
+  --paper: #efe4d2;
+  --paper-deep: #e6d5b8;
+  --card: #fbf6ec;
+  --ink: #2a2218;
+  --ink-soft: #5c5144;
+  --line: #d7c4a8;
+  --cinnabar: #9a3b2f;
+  --cinnabar-deep: #7c2e24;
+  --gold: #b08948;
+  --wood: #3f6a4c;
+  --fire: #b44532;
+  --earth: #9a7348;
+  --metal: #c4a056;
+  --water: #3b6586;
+  --shadow: 0 18px 50px rgba(74, 48, 22, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  color: var(--ink);
+  font-family: "Noto Serif TC", "Songti TC", "LiSong Pro", serif;
+  background: #1a1612;
+}
+
+button,
+select {
+  font-family: inherit;
+}
+
+@media (max-width: 700px), (hover: none) and (pointer: coarse) and (max-width: 900px) {
+  body {
+    background: var(--paper);
+  }
+}

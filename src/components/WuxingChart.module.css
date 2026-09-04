@@ -1,0 +1,46 @@
+.wrap {
+  margin: 0 -4px 4px;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.sheng {
+  font-size: 12px;
+  fill: #7a4e2a;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+  font-weight: 500;
+}
+
+.ke {
+  font-size: 11px;
+  fill: #c2a07a;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+}
+
+.el {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+}
+
+.pct {
+  font-size: 11px;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+}
+
+.god {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+}
+
+.ri {
+  font-size: 10px;
+  font-weight: 600;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+}

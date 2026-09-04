@@ -1,0 +1,117 @@
+.mask {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  background: rgba(42, 34, 24, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.sheet {
+  width: min(520px, 100%);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px 18px 16px;
+  box-shadow: var(--shadow);
+}
+
+.kicker {
+  margin: 0;
+  text-align: center;
+  letter-spacing: 0.28em;
+  font-size: 12px;
+  color: var(--cinnabar);
+}
+
+.title {
+  margin: 8px 0 16px;
+  text-align: center;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+.wheels {
+  display: grid;
+  grid-template-columns: 1.15fr 0.75fr 0.75fr 0.75fr;
+  gap: 8px;
+  background: #f3e7d3;
+  border-radius: 14px;
+  padding: 8px;
+}
+
+.wheelCol {
+  min-width: 0;
+}
+
+.wheelLabel {
+  display: block;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.wheel {
+  position: relative;
+  height: 168px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  overflow-anchor: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: y proximity;
+}
+
+.opt,
+.optOn {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 8px 2px;
+  font-size: 13px;
+  scroll-snap-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.optOn {
+  color: var(--cinnabar-deep);
+  font-weight: 700;
+  background: rgba(154, 59, 47, 0.08);
+  border-radius: 8px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ghost,
+.solid {
+  flex: 1;
+  height: 44px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.ghost {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.solid {
+  border: 0;
+  background: var(--cinnabar);
+  color: #fbf6ec;
+}

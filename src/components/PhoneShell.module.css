@@ -1,0 +1,133 @@
+.stage {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 16px 16px 24px;
+  background: #1a1612;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+  color: #d7c4a8;
+  font-size: 13px;
+}
+
+.toolbar select {
+  appearance: none;
+  border: 1px solid #5c5144;
+  background: #2a2218;
+  color: #fbf6ec;
+  border-radius: 999px;
+  padding: 8px 14px;
+  min-width: 240px;
+  cursor: pointer;
+}
+
+.scaleWrap {
+  transform-origin: center center;
+  flex: 0 0 auto;
+}
+
+.device {
+  width: 100%;
+  height: 100%;
+  background: #111;
+  border-radius: 44px;
+  padding: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  position: relative;
+}
+
+.island {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 96px;
+  height: 28px;
+  margin-left: -48px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 32px;
+  padding-top: 22px;
+  background: var(--paper);
+  background-image:
+    radial-gradient(1200px 600px at 50% -10%, #f7ead3 0%, transparent 55%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(120, 80, 40, 0.03) 0 1px,
+      transparent 1px 7px
+    );
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.overlayRoot {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.overlayRoot > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 700px), (hover: none) and (pointer: coarse) and (max-width: 900px) {
+  .stage {
+    padding: 0;
+    background: var(--paper);
+    justify-content: stretch;
+    align-items: stretch;
+  }
+
+  .toolbar {
+    display: none;
+  }
+
+  .scaleWrap {
+    width: 100% !important;
+    height: 100dvh !important;
+    transform: none !important;
+  }
+
+  .device {
+    width: 100% !important;
+    height: 100dvh !important;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .island {
+    display: none;
+  }
+
+  .screen {
+    border-radius: 0;
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top);
+  }
+}
