@@ -177,3 +177,25 @@
 .pop button {
   width: 100%;
 }
+
+.toastLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.toast {
+  margin: 0;
+  max-width: calc(100% - 48px);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(42, 34, 24, 0.82);
+  color: #fbf6ec;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-align: center;
+}

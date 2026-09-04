@@ -10,13 +10,13 @@ const STEPS = [
   "納入干支合化與藏干能量……",
 ];
 
-const STEP_MS = [1800, 2600, 2600];
+const STEP_MS = [1100, 1600, 1600];
 
 export default function CastingOverlay({ onDone }: { onDone: () => void }) {
   const [shown, setShown] = useState(1);
 
   useEffect(() => {
-    const wait = STEP_MS[shown - 1] ?? 2600;
+    const wait = STEP_MS[shown - 1] ?? STEP_MS[STEP_MS.length - 1];
     if (shown < STEPS.length) {
       const timer = window.setTimeout(() => setShown((n) => n + 1), wait);
       return () => window.clearTimeout(timer);

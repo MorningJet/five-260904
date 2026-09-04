@@ -8,13 +8,16 @@ import { PhoneOverlay } from "@/components/PhoneOverlay";
 import ProductGrid from "@/components/ProductGrid";
 import WuxingChart from "@/components/WuxingChart";
 import { calculateBazi } from "@/lib/bazi/engine";
+import { consumeCast, remainingCasts } from "@/lib/castQuota";
 import { recommendProducts } from "@/lib/recommend";
 import products from "@/data/products.json";
 import type { Product } from "@/lib/types";
 import styles from "./Home.module.css";
 
-const DEFAULT_BIRTH: BirthValue = { year: 1997, month: 9, day: 30, hour: 13 };
+const DEFAULT_BIRTH: BirthValue = { year: 2000, month: 1, day: 1, hour: 0 };
 const BIRTH_KEY = "five-birth";
+const CAST_LIMIT_TOAST = "今日5次試用已結束，請明日再來";
+const TOAST_MS = 2400;
 
 function readBirth(): BirthValue | null {
   if (typeof window === "undefined") return null;
@@ -43,18 +46,31 @@ export default function HomePage() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [casting, setCasting] = useState(false);
+  const [limitToastAt, setLimitToastAt] = useState(0);
   const pendingBirth = useRef<BirthValue | null>(null);
 
   useEffect(() => {
     const saved = readBirth();
-    if (saved) {
-      setDraft(saved);
-      setBirth(saved);
-    } else {
-      setPickerOpen(true);
-    }
+    setDraft(saved ?? DEFAULT_BIRTH);
+    setBirth(saved ?? DEFAULT_BIRTH);
     setReady(true);
   }, []);
+
+  useEffect(() => {
+    if (!limitToastAt) return;
+    const timer = window.setTimeout(() => setLimitToastAt(0), TOAST_MS);
+    return () => window.clearTimeout(timer);
+  }, [limitToastAt]);
+
+  const showCastLimit = () => setLimitToastAt(Date.now());
+
+  const openPicker = () => {
+    if (remainingCasts() <= 0) {
+      showCastLimit();
+      return;
+    }
+    setPickerOpen(true);
+  };
 
   const finishCasting = useCallback(() => {
     const next = pendingBirth.current;
@@ -94,7 +110,7 @@ export default function HomePage() {
       {ready && !result && !casting && (
         <section className={styles.empty}>
           <p>請填寫出生年、月、日、時，即可查看五行命理與手串推薦</p>
-          <button type="button" onClick={() => setPickerOpen(true)}>
+          <button type="button" onClick={openPicker}>
             輸入出生時間
           </button>
         </section>
@@ -105,7 +121,7 @@ export default function HomePage() {
           <section className={styles.card}>
             <div className={styles.cardHead}>
               <h2>出生時間</h2>
-              <button type="button" className={styles.edit} onClick={() => setPickerOpen(true)}>
+              <button type="button" className={styles.edit} onClick={openPicker}>
                 更改
               </button>
             </div>
@@ -140,6 +156,11 @@ export default function HomePage() {
           onChange={setDraft}
           onClose={() => setPickerOpen(false)}
           onConfirm={() => {
+            if (!consumeCast()) {
+              setPickerOpen(false);
+              showCastLimit();
+              return;
+            }
             pendingBirth.current = draft;
             setPickerOpen(false);
             setCasting(true);
@@ -161,6 +182,13 @@ export default function HomePage() {
             </button>
           </div>
         </div>
+        </PhoneOverlay>
+      )}
+      {limitToastAt > 0 && (
+        <PhoneOverlay>
+          <div className={styles.toastLayer} role="status" style={{ pointerEvents: "none" }}>
+            <p className={styles.toast}>{CAST_LIMIT_TOAST}</p>
+          </div>
         </PhoneOverlay>
       )}
     </main>
