@@ -2,11 +2,11 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   CAST_QUOTA_KEY,
-  CAST_WHITELIST_FLAG_KEY,
-  CAST_WHITELIST_TOKEN,
   DAILY_CAST_LIMIT,
-  applyWhitelistFromSearch,
+  DEVICE_ID_KEY,
   consumeCast,
+  createDeviceId,
+  getOrCreateDeviceId,
   remainingCasts,
   taipeiDateKey,
   type QuotaStorage,
@@ -28,6 +28,17 @@ describe("taipeiDateKey", () => {
     const earlySep5 = new Date("2026-09-04T16:00:00.000Z");
     assert.equal(taipeiDateKey(lateSep4), "2026-09-04");
     assert.equal(taipeiDateKey(earlySep5), "2026-09-05");
+  });
+});
+
+describe("getOrCreateDeviceId", () => {
+  it("同一儲存只產生一次編號", () => {
+    const storage = memoryStorage();
+    const a = getOrCreateDeviceId(storage);
+    const b = getOrCreateDeviceId(storage);
+    assert.match(a, /^FIVE-[0-9A-F]{4}-[0-9A-F]{4}$/);
+    assert.equal(a, b);
+    assert.equal(createDeviceId().startsWith("FIVE-"), true);
   });
 });
 
@@ -54,16 +65,15 @@ describe("consumeCast", () => {
     assert.equal(JSON.parse(storage.getItem(CAST_QUOTA_KEY) ?? "{}").count, 1);
   });
 
-  it("白名單裝置不消耗次數、可無限排盤", () => {
-    const storage = memoryStorage();
+  it("白名單裝置編號不消耗次數、可無限排盤", () => {
+    const id = "FIVE-ABCD-1234";
+    const storage = memoryStorage({ [DEVICE_ID_KEY]: id });
     const now = new Date("2026-09-04T04:00:00.000Z");
-    assert.equal(applyWhitelistFromSearch("?wl=wrong", storage), false);
-    assert.equal(applyWhitelistFromSearch(`?wl=${CAST_WHITELIST_TOKEN}`, storage), true);
-    assert.equal(storage.getItem(CAST_WHITELIST_FLAG_KEY), "1");
+    const allow = [id];
     for (let i = 0; i < DAILY_CAST_LIMIT + 3; i += 1) {
-      assert.equal(consumeCast(now, storage), true);
+      assert.equal(consumeCast(now, storage, allow), true);
     }
-    assert.equal(remainingCasts(now, storage), DAILY_CAST_LIMIT);
+    assert.equal(remainingCasts(now, storage, allow), DAILY_CAST_LIMIT);
     assert.equal(storage.getItem(CAST_QUOTA_KEY), null);
   });
 });

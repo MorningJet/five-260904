@@ -1,6 +1,7 @@
+import { WHITELIST_DEVICE_IDS } from "./whitelist";
+
 export const CAST_QUOTA_KEY = "five-cast-quota";
-export const CAST_WHITELIST_FLAG_KEY = "five-cast-whitelist";
-export const CAST_WHITELIST_TOKEN = process.env.NEXT_PUBLIC_CAST_WHITELIST || "mj-five-wl";
+export const DEVICE_ID_KEY = "five-device-id";
 export const DAILY_CAST_LIMIT = 5;
 
 export type QuotaStorage = {
@@ -41,35 +42,41 @@ function readState(storage: QuotaStorage | null): { date: string; count: number 
   }
 }
 
-export function isWhitelisted(storage: QuotaStorage | null = browserStorage()): boolean {
+export function createDeviceId(): string {
+  const bytes = new Uint8Array(8);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(bytes);
+  } else {
+    for (let i = 0; i < bytes.length; i += 1) bytes[i] = Math.floor(Math.random() * 256);
+  }
+  const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+  return `FIVE-${hex.slice(0, 4)}-${hex.slice(4, 8)}`;
+}
+
+export function getOrCreateDeviceId(storage: QuotaStorage | null = browserStorage()): string {
+  if (!storage) return "";
+  const existing = storage.getItem(DEVICE_ID_KEY)?.trim() ?? "";
+  if (existing) return existing;
+  const next = createDeviceId();
+  storage.setItem(DEVICE_ID_KEY, next);
+  return next;
+}
+
+export function isWhitelisted(
+  storage: QuotaStorage | null = browserStorage(),
+  allowList: readonly string[] = WHITELIST_DEVICE_IDS,
+): boolean {
   if (!storage) return false;
-  return storage.getItem(CAST_WHITELIST_FLAG_KEY) === "1";
-}
-
-export function activateWhitelist(
-  token: string,
-  storage: QuotaStorage | null = browserStorage(),
-): boolean {
-  if (!storage || token !== CAST_WHITELIST_TOKEN) return false;
-  storage.setItem(CAST_WHITELIST_FLAG_KEY, "1");
-  return true;
-}
-
-export function applyWhitelistFromSearch(
-  search: string,
-  storage: QuotaStorage | null = browserStorage(),
-): boolean {
-  const raw = search.startsWith("?") ? search.slice(1) : search;
-  const token = new URLSearchParams(raw).get("wl");
-  if (!token) return false;
-  return activateWhitelist(token, storage);
+  const id = storage.getItem(DEVICE_ID_KEY)?.trim() ?? "";
+  return id.length > 0 && allowList.includes(id);
 }
 
 export function remainingCasts(
   now: Date = new Date(),
   storage: QuotaStorage | null = browserStorage(),
+  allowList: readonly string[] = WHITELIST_DEVICE_IDS,
 ): number {
-  if (isWhitelisted(storage)) return DAILY_CAST_LIMIT;
+  if (isWhitelisted(storage, allowList)) return DAILY_CAST_LIMIT;
   const today = taipeiDateKey(now);
   const state = readState(storage);
   if (!state || state.date !== today) return DAILY_CAST_LIMIT;
@@ -79,9 +86,10 @@ export function remainingCasts(
 export function consumeCast(
   now: Date = new Date(),
   storage: QuotaStorage | null = browserStorage(),
+  allowList: readonly string[] = WHITELIST_DEVICE_IDS,
 ): boolean {
   if (!storage) return false;
-  if (isWhitelisted(storage)) return true;
+  if (isWhitelisted(storage, allowList)) return true;
   const today = taipeiDateKey(now);
   const state = readState(storage);
   const count = state && state.date === today ? state.count : 0;

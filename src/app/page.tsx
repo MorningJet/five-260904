@@ -8,7 +8,7 @@ import { PhoneOverlay } from "@/components/PhoneOverlay";
 import ProductGrid from "@/components/ProductGrid";
 import WuxingChart from "@/components/WuxingChart";
 import { calculateBazi } from "@/lib/bazi/engine";
-import { applyWhitelistFromSearch, consumeCast, remainingCasts } from "@/lib/castQuota";
+import { consumeCast, getOrCreateDeviceId, remainingCasts } from "@/lib/castQuota";
 import { recommendProducts } from "@/lib/recommend";
 import products from "@/data/products.json";
 import type { Product } from "@/lib/types";
@@ -47,15 +47,11 @@ export default function HomePage() {
   const [ready, setReady] = useState(false);
   const [casting, setCasting] = useState(false);
   const [limitToastAt, setLimitToastAt] = useState(0);
+  const [deviceId, setDeviceId] = useState("");
   const pendingBirth = useRef<BirthValue | null>(null);
 
   useEffect(() => {
-    if (applyWhitelistFromSearch(window.location.search)) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete("wl");
-      const next = `${url.pathname}${url.search}${url.hash}`;
-      window.history.replaceState({}, "", next);
-    }
+    setDeviceId(getOrCreateDeviceId());
     const saved = readBirth();
     setDraft(saved ?? DEFAULT_BIRTH);
     setBirth(saved ?? DEFAULT_BIRTH);
@@ -183,7 +179,19 @@ export default function HomePage() {
             <p>
               命盤結果僅供參考，個人運勢高低與影響仍需綜合判斷。此處計算僅供娛樂與飾品搭配建議，不構成任何主張。請理性看待，並相信科學。
             </p>
-            <button type="button" onClick={() => setHelpOpen(false)}>
+            {deviceId ? (
+              <button
+                type="button"
+                className={styles.deviceId}
+                onClick={() => {
+                  void navigator.clipboard.writeText(deviceId);
+                }}
+              >
+                裝置編號 {deviceId}
+                <span>點一下即可複製</span>
+              </button>
+            ) : null}
+            <button type="button" className={styles.ok} onClick={() => setHelpOpen(false)}>
               了解
             </button>
           </div>

@@ -41,7 +41,7 @@
 }
 
 .empty button,
-.pop button {
+.pop .ok {
   border: 0;
   background: var(--cinnabar);
   color: #fbf6ec;
@@ -174,8 +174,31 @@
   line-height: 1.7;
 }
 
-.pop button {
+.pop .ok {
   width: 100%;
+}
+
+.deviceId {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+
+.deviceId span {
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
 }
 
 .toastLayer {
