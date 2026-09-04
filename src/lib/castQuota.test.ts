@@ -2,7 +2,10 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
   CAST_QUOTA_KEY,
+  CAST_WHITELIST_FLAG_KEY,
+  CAST_WHITELIST_TOKEN,
   DAILY_CAST_LIMIT,
+  applyWhitelistFromSearch,
   consumeCast,
   remainingCasts,
   taipeiDateKey,
@@ -49,5 +52,18 @@ describe("consumeCast", () => {
     assert.equal(remainingCasts(day2, storage), DAILY_CAST_LIMIT);
     assert.equal(consumeCast(day2, storage), true);
     assert.equal(JSON.parse(storage.getItem(CAST_QUOTA_KEY) ?? "{}").count, 1);
+  });
+
+  it("白名單裝置不消耗次數、可無限排盤", () => {
+    const storage = memoryStorage();
+    const now = new Date("2026-09-04T04:00:00.000Z");
+    assert.equal(applyWhitelistFromSearch("?wl=wrong", storage), false);
+    assert.equal(applyWhitelistFromSearch(`?wl=${CAST_WHITELIST_TOKEN}`, storage), true);
+    assert.equal(storage.getItem(CAST_WHITELIST_FLAG_KEY), "1");
+    for (let i = 0; i < DAILY_CAST_LIMIT + 3; i += 1) {
+      assert.equal(consumeCast(now, storage), true);
+    }
+    assert.equal(remainingCasts(now, storage), DAILY_CAST_LIMIT);
+    assert.equal(storage.getItem(CAST_QUOTA_KEY), null);
   });
 });

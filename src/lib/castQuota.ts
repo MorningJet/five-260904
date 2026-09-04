@@ -1,4 +1,6 @@
 export const CAST_QUOTA_KEY = "five-cast-quota";
+export const CAST_WHITELIST_FLAG_KEY = "five-cast-whitelist";
+export const CAST_WHITELIST_TOKEN = process.env.NEXT_PUBLIC_CAST_WHITELIST || "mj-five-wl";
 export const DAILY_CAST_LIMIT = 5;
 
 export type QuotaStorage = {
@@ -39,10 +41,35 @@ function readState(storage: QuotaStorage | null): { date: string; count: number 
   }
 }
 
+export function isWhitelisted(storage: QuotaStorage | null = browserStorage()): boolean {
+  if (!storage) return false;
+  return storage.getItem(CAST_WHITELIST_FLAG_KEY) === "1";
+}
+
+export function activateWhitelist(
+  token: string,
+  storage: QuotaStorage | null = browserStorage(),
+): boolean {
+  if (!storage || token !== CAST_WHITELIST_TOKEN) return false;
+  storage.setItem(CAST_WHITELIST_FLAG_KEY, "1");
+  return true;
+}
+
+export function applyWhitelistFromSearch(
+  search: string,
+  storage: QuotaStorage | null = browserStorage(),
+): boolean {
+  const raw = search.startsWith("?") ? search.slice(1) : search;
+  const token = new URLSearchParams(raw).get("wl");
+  if (!token) return false;
+  return activateWhitelist(token, storage);
+}
+
 export function remainingCasts(
   now: Date = new Date(),
   storage: QuotaStorage | null = browserStorage(),
 ): number {
+  if (isWhitelisted(storage)) return DAILY_CAST_LIMIT;
   const today = taipeiDateKey(now);
   const state = readState(storage);
   if (!state || state.date !== today) return DAILY_CAST_LIMIT;
@@ -54,6 +81,7 @@ export function consumeCast(
   storage: QuotaStorage | null = browserStorage(),
 ): boolean {
   if (!storage) return false;
+  if (isWhitelisted(storage)) return true;
   const today = taipeiDateKey(now);
   const state = readState(storage);
   const count = state && state.date === today ? state.count : 0;

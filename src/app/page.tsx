@@ -8,7 +8,7 @@ import { PhoneOverlay } from "@/components/PhoneOverlay";
 import ProductGrid from "@/components/ProductGrid";
 import WuxingChart from "@/components/WuxingChart";
 import { calculateBazi } from "@/lib/bazi/engine";
-import { consumeCast, remainingCasts } from "@/lib/castQuota";
+import { applyWhitelistFromSearch, consumeCast, remainingCasts } from "@/lib/castQuota";
 import { recommendProducts } from "@/lib/recommend";
 import products from "@/data/products.json";
 import type { Product } from "@/lib/types";
@@ -50,6 +50,12 @@ export default function HomePage() {
   const pendingBirth = useRef<BirthValue | null>(null);
 
   useEffect(() => {
+    if (applyWhitelistFromSearch(window.location.search)) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("wl");
+      const next = `${url.pathname}${url.search}${url.hash}`;
+      window.history.replaceState({}, "", next);
+    }
     const saved = readBirth();
     setDraft(saved ?? DEFAULT_BIRTH);
     setBirth(saved ?? DEFAULT_BIRTH);
