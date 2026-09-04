@@ -2,7 +2,7 @@
   width: 100%;
   min-height: 100%;
   margin: 0 auto;
-  padding: 18px 16px 64px;
+  padding: 18px 16px 28px;
 }
 
 .hero {
@@ -178,27 +178,19 @@
   width: 100%;
 }
 
-.deviceId {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
+.deviceFoot {
+  display: block;
   width: 100%;
-  margin: 0 0 12px;
-  padding: 8px 10px;
-  border: 1px dashed var(--line);
-  border-radius: 10px;
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
   background: transparent;
-  color: var(--ink-soft);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-}
-
-.deviceId span {
+  color: #9a8b78;
   font-size: 11px;
-  letter-spacing: 0.02em;
-  opacity: 0.75;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
 }
 
 .toastLayer {

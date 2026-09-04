@@ -149,6 +149,17 @@ export default function HomePage() {
           </section>
 
           <ProductGrid items={recs} usefulLabel={result.usefulLabel} />
+          {deviceId ? (
+            <button
+              type="button"
+              className={styles.deviceFoot}
+              onClick={() => {
+                void navigator.clipboard.writeText(deviceId);
+              }}
+            >
+              裝置號 {deviceId}
+            </button>
+          ) : null}
         </>
       )}
 
@@ -179,18 +190,6 @@ export default function HomePage() {
             <p>
               命盤結果僅供參考，個人運勢高低與影響仍需綜合判斷。此處計算僅供娛樂與飾品搭配建議，不構成任何主張。請理性看待，並相信科學。
             </p>
-            {deviceId ? (
-              <button
-                type="button"
-                className={styles.deviceId}
-                onClick={() => {
-                  void navigator.clipboard.writeText(deviceId);
-                }}
-              >
-                裝置編號 {deviceId}
-                <span>點一下即可複製</span>
-              </button>
-            ) : null}
             <button type="button" className={styles.ok} onClick={() => setHelpOpen(false)}>
               了解
             </button>
