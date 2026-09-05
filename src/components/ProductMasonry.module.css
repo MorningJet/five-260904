@@ -1,0 +1,84 @@
+.fall {
+  column-count: 2;
+  column-gap: 10px;
+}
+
+.card {
+  break-inside: avoid;
+  margin: 0 0 10px;
+  background: #fffaf4;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.photoWrap {
+  position: relative;
+  display: block;
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: #f3ebe0;
+}
+
+.brandMark {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.body {
+  padding: 10px 10px 12px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.name {
+  margin: 0;
+  min-width: 0;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.price {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cinnabar);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.meta span {
+  min-width: 0;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}

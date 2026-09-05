@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { scorePillars, pickUseful } from "./score";
 import { calculateBazi } from "./engine";
+import { personWuxingFromDayGan } from "./constants";
 import type { FourPillars } from "./types";
 
 function p(gan: string, zhi: string, hide: string[]): FourPillars["year"] {
@@ -60,6 +61,10 @@ describe("calculateBazi 1997-09-30 13:00", () => {
   it("日主為乙，農曆丁丑年八月廿九", () => {
     const r = calculateBazi({ year: 1997, month: 9, day: 30, hour: 13 });
     assert.equal(r.dayMaster, "乙");
+    assert.equal(r.dayMasterElement, "wood");
+    assert.equal(personWuxingFromDayGan("乙"), "wood");
+    assert.equal(personWuxingFromDayGan("戊"), "earth");
+    assert.equal(personWuxingFromDayGan("庚"), "metal");
     assert.equal(r.dayMasterDesc, "陰木");
     assert.equal(r.lunarLabel, "丁丑年八月廿九");
     assert.equal(r.pillars.day.ganZhi, "乙亥");

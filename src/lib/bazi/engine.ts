@@ -1,5 +1,5 @@
 import { Solar } from "lunar-javascript";
-import { STEM_LABEL, STEM_WUXING, STEM_YIN_YANG } from "./constants";
+import { STEM_LABEL, STEM_YIN_YANG, personWuxingFromDayGan } from "./constants";
 import { assembleResult } from "./score";
 import type { BaziResult, FourPillars, Pillar } from "./types";
 
@@ -44,7 +44,8 @@ export function calculateBazi(input: {
   const dayMaster = pillars.day.gan;
   const polarity = STEM_YIN_YANG[dayMaster];
   const desc = STEM_LABEL[dayMaster];
-  if (!STEM_WUXING[dayMaster] || !polarity || !desc) {
+  personWuxingFromDayGan(dayMaster);
+  if (!polarity || !desc) {
     throw new Error(`未知日干: ${dayMaster}`);
   }
 

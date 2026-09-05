@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
 import ElementBadge from "@/components/ElementBadge";
 import OrnamentTitle from "@/components/OrnamentTitle";
 import type { RecommendItem } from "@/lib/types";
@@ -25,6 +26,9 @@ export default function ProductGrid({
                   src={encodeURI(p.image)}
                   alt={`${p.name} 沉香手串`}
                 />
+                <span className={styles.brandMark}>
+                  <BrandLogo size="sm" mark />
+                </span>
               </Link>
               <div className={styles.caption}>
                 <p className={styles.name}>{p.name}</p>

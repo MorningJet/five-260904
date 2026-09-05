@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/date";
 import { describeProduct } from "@/lib/productCopy";
 import type { Product } from "@/lib/types";
+import BrandLogo from "./BrandLogo";
 import ElementBadge from "./ElementBadge";
 import OrnamentTitle from "./OrnamentTitle";
 import { PhoneOverlay } from "./PhoneOverlay";
@@ -24,14 +25,22 @@ export default function ProductDetail({ product }: { product: Product }) {
   return (
     <main className={styles.page}>
       <header className={styles.top}>
-        <p className={styles.brand}>五行沉香</p>
+        <span className={styles.brandRow}>
+          <BrandLogo size="sm" />
+          <p className={styles.brand}>五行沉香</p>
+        </span>
       </header>
 
-      <img
-        className={styles.hero}
-        src={encodeURI(product.image)}
-        alt={`${product.name} 沉香手串`}
-      />
+      <div className={styles.heroWrap}>
+        <img
+          className={styles.hero}
+          src={encodeURI(product.image)}
+          alt={`${product.name} 沉香手串`}
+        />
+        <span className={styles.brandMark}>
+          <BrandLogo size="sm" mark />
+        </span>
+      </div>
 
       <section className={styles.card}>
         <OrnamentTitle size="lg">{product.name}</OrnamentTitle>
@@ -64,7 +73,17 @@ export default function ProductDetail({ product }: { product: Product }) {
       </section>
 
       <div className={styles.buyWrap}>
-        <button type="button" className={styles.back} onClick={() => router.push("/")}>
+        <button
+          type="button"
+          className={styles.back}
+          onClick={() => {
+            if (typeof window !== "undefined" && window.history.length > 1) {
+              router.back();
+              return;
+            }
+            router.push("/");
+          }}
+        >
           返回
         </button>
         <button type="button" className={styles.buy} onClick={() => setToastAt(Date.now())}>

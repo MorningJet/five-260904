@@ -1,0 +1,24 @@
+.mark {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.md {
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+}
+
+.xs {
+  width: 14px;
+  height: 14px;
+  font-size: 9px;
+}

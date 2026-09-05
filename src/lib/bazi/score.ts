@@ -13,6 +13,7 @@ import {
   TIAOHOU_BY_MONTH_ZHI,
   WUXING,
   WUXING_LABEL,
+  personWuxingFromDayGan,
   type Wuxing,
 } from "./constants";
 import type { BaziResult, FourPillars, Strength } from "./types";
@@ -135,7 +136,7 @@ export function assembleResult(params: {
   desc: string;
 }): BaziResult {
   const scored = scorePillars(params.pillars);
-  const me = STEM_WUXING[params.dayMaster];
+  const me = personWuxingFromDayGan(params.dayMaster);
   const { useful, tiaohou } = pickUseful(
     me,
     scored.strength,

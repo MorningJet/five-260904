@@ -7,6 +7,7 @@ export function recommendProducts(
   products: Product[],
   useful: Wuxing[],
   limit = 4,
+  keepAll = false,
 ): RecommendItem[] {
   const ranked = products
     .map((product) => {
@@ -28,6 +29,7 @@ export function recommendProducts(
     })
     .sort((a, b) => b.score - a.score || a.product.price - b.product.price);
 
+  if (keepAll) return ranked.slice(0, limit);
   const hits = ranked.filter((r) => useful.includes(r.product.element));
   const pool = hits.length >= 2 ? hits : ranked;
   return diversifyByUseful(pool, useful, limit);

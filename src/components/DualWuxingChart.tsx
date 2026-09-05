@@ -1,5 +1,6 @@
 import { WUXING_LABEL, WUXING_THEME, type Wuxing } from "@/lib/bazi/constants";
 import type { BaziResult } from "@/lib/bazi/types";
+import type { HepanResult } from "@/lib/hepan/engine";
 import styles from "./WuxingChart.module.css";
 
 const ORDER: Wuxing[] = ["fire", "earth", "metal", "water", "wood"];
@@ -16,10 +17,10 @@ const GOD_LAYOUT: Record<
   { x: number; y: number; anchor: "start" | "middle" | "end" }
 > = {
   fire: { x: 0, y: -28, anchor: "middle" },
-  earth: { x: 28, y: -4, anchor: "start" },
-  metal: { x: 28, y: 2, anchor: "start" },
-  water: { x: -28, y: 2, anchor: "end" },
-  wood: { x: -28, y: -4, anchor: "end" },
+  earth: { x: 32, y: -4, anchor: "start" },
+  metal: { x: 32, y: 2, anchor: "start" },
+  water: { x: -32, y: 2, anchor: "end" },
+  wood: { x: -32, y: -4, anchor: "end" },
 };
 
 function nodeAngle(i: number) {
@@ -46,15 +47,23 @@ function mix(a: { x: number; y: number }, b: { x: number; y: number }, t: number
   return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
 }
 
-export default function WuxingChart({ result }: { result: BaziResult }) {
+export default function DualWuxingChart({
+  a,
+  b,
+  hepan,
+}: {
+  a: BaziResult;
+  b: BaziResult;
+  hepan: HepanResult;
+}) {
   const nodes = ORDER.map((el, i) => ({ el, ...polar(i) }));
 
   return (
     <div className={styles.wrap}>
-      <svg viewBox="0 0 360 232" className={styles.svg} role="img" aria-label="五行力量圖">
+      <svg viewBox="0 0 360 232" className={styles.svg} role="img" aria-label="雙人合盤五行圖">
         <defs>
           <marker
-            id="arrSheng"
+            id="arrShengDual"
             viewBox="0 0 12 12"
             refX="10"
             refY="6"
@@ -65,7 +74,7 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
             <path d="M0 1.5 L12 6 L0 10.5 Z" fill="#7A4E2A" />
           </marker>
           <marker
-            id="arrKe"
+            id="arrKeDual"
             viewBox="0 0 12 12"
             refX="10"
             refY="6"
@@ -94,6 +103,11 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
           <circle cx="180" cy="190" r="62" stroke="#EEDDBC" strokeWidth="0.7" />
         </g>
 
+        <circle cx={CX} cy={CY} r="18" fill="#fffaf4" stroke="#d8a499" strokeWidth="1.1" />
+        <text x={CX} y={CY + 5} textAnchor="middle" fill="#9a3b2f" className={styles.el}>
+          {hepan.centerGlyph}
+        </text>
+
         {nodes.map((from, i) => {
           const to = nodes[(i + 2) % nodes.length];
           const p0 = along(from, to, NODE_R + 2);
@@ -113,7 +127,7 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                 y2={p1.y}
                 stroke="#C2A07A"
                 strokeWidth="1.15"
-                markerEnd="url(#arrKe)"
+                markerEnd="url(#arrKeDual)"
               />
               <text x={mid.x} y={mid.y + 4} textAnchor="middle" className={styles.ke}>
                 克
@@ -124,9 +138,11 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
 
         {nodes.map((n) => {
           const theme = WUXING_THEME[n.el];
-          const pct = Math.round(result.percents[n.el]);
-          const [godA, godB] = result.tenGods[n.el];
-          const isDay = n.el === result.dayMasterElement;
+          const pct = Math.round(hepan.combinedPercents[n.el]);
+          const pctA = Math.round(a.percents[n.el]);
+          const pctB = Math.round(b.percents[n.el]);
+          const isA = n.el === a.dayMasterElement;
+          const isB = n.el === b.dayMasterElement;
           const side = GOD_LAYOUT[n.el];
           return (
             <g key={n.el}>
@@ -152,7 +168,7 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                   fill={theme.ink}
                   className={styles.god}
                 >
-                  {godA} {godB}
+                  甲{pctA} 乙{pctB}
                 </text>
               ) : (
                 <>
@@ -163,7 +179,7 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                     fill={theme.ink}
                     className={styles.god}
                   >
-                    {godA}
+                    甲{pctA}
                   </text>
                   <text
                     x={n.x + side.x}
@@ -172,16 +188,16 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                     fill={theme.ink}
                     className={styles.god}
                   >
-                    {godB}
+                    乙{pctB}
                   </text>
                 </>
               )}
-              {isDay && (
+              {isA || isB ? (
                 <g>
                   <rect
-                    x={n.x - 18}
+                    x={n.x - 16}
                     y={n.y + NODE_R - 7}
-                    width="34"
+                    width="32"
                     height="15"
                     rx="7.5"
                     fill={theme.badge}
@@ -193,10 +209,10 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                     fill="#fff"
                     className={styles.ri}
                   >
-                    日主
+                    {isA && isB ? "雙日" : isA ? "甲日" : "乙日"}
                   </text>
                 </g>
-              )}
+              ) : null}
             </g>
           );
         })}
@@ -221,7 +237,7 @@ export default function WuxingChart({ result }: { result: BaziResult }) {
                 stroke="#7A4E2A"
                 strokeWidth="1.7"
                 strokeLinecap="round"
-                markerEnd="url(#arrSheng)"
+                markerEnd="url(#arrShengDual)"
               />
               <text x={lx} y={ly + 4} textAnchor="middle" className={styles.sheng}>
                 生

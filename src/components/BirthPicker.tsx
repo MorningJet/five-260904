@@ -20,9 +20,18 @@ type Props = {
   onChange: (next: BirthValue) => void;
   onConfirm: () => void;
   onClose: () => void;
+  kicker?: string;
+  confirmText?: string;
 };
 
-export default function BirthPicker({ value, onChange, onConfirm, onClose }: Props) {
+export default function BirthPicker({
+  value,
+  onChange,
+  onConfirm,
+  onClose,
+  kicker = "請輸入出生時間",
+  confirmText = "開始排盤",
+}: Props) {
   const days = daysInMonth(value.year, value.month);
   const set = (patch: Partial<BirthValue>) => {
     const next = { ...value, ...patch };
@@ -43,7 +52,7 @@ export default function BirthPicker({ value, onChange, onConfirm, onClose }: Pro
         role="dialog"
         aria-labelledby="birth-title"
       >
-        <p className={styles.kicker}>請輸入出生時間</p>
+        <p className={styles.kicker}>{kicker}</p>
         <h2 id="birth-title" className={styles.title}>
           {summary}
         </h2>
@@ -80,7 +89,7 @@ export default function BirthPicker({ value, onChange, onConfirm, onClose }: Pro
             取消
           </button>
           <button type="button" className={styles.solid} onClick={onConfirm}>
-            開始排盤
+            {confirmText}
           </button>
         </div>
       </div>

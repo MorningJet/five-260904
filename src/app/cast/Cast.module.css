@@ -1,0 +1,239 @@
+.shell {
+  width: 100%;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 8px 16px 20px;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  margin-bottom: 10px;
+  padding: 0 40px;
+}
+
+.back {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.back svg {
+  display: block;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand {
+  margin: 0;
+  letter-spacing: 0.42em;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--cinnabar);
+}
+
+.empty {
+  background: var(--card);
+  border: 1px dashed var(--gold);
+  border-radius: 16px;
+  padding: 28px 12px;
+  text-align: center;
+}
+
+.empty p {
+  margin: 0 0 14px;
+  color: var(--ink-soft);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.empty button,
+.pop .ok {
+  border: 0;
+  background: var(--cinnabar);
+  color: #fbf6ec;
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.card {
+  background: #fffaf4;
+  border: 0;
+  border-radius: 16px;
+  padding: 12px 14px 10px;
+  margin-bottom: 10px;
+}
+
+.plain {
+  background: #fffaf4;
+  border: 0;
+  border-radius: 16px;
+  padding: 8px 8px 14px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.ornamentHead {
+  position: relative;
+  margin-bottom: 0;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardHead h2 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+
+.edit {
+  border: 0;
+  background: #f0a05a;
+  color: #3b2412;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.q {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 99px;
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1;
+  padding: 0;
+  display: grid;
+  place-items: center;
+}
+
+.solar {
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  line-height: 1.4;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.attr {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+
+.attr span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+}
+
+.attr strong {
+  display: block;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 34, 24, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 30;
+}
+
+.pop {
+  width: min(360px, 100%);
+  background: var(--card);
+  border-radius: 16px;
+  padding: 14px 20px 16px;
+  border: 1px solid var(--line);
+}
+
+.pop h3 {
+  margin: 0;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.pop p {
+  margin: 0 0 12px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pop .ok {
+  width: 100%;
+}
+
+.deviceFoot {
+  display: block;
+  width: 100%;
+  margin: 18px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #9a8b78;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+}
+
+.toastLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.toast {
+  margin: 0;
+  max-width: calc(100% - 48px);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(42, 34, 24, 0.82);
+  color: #fbf6ec;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+  text-align: center;
+}

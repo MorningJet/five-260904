@@ -1,209 +1,105 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import BirthPicker, { type BirthValue } from "@/components/BirthPicker";
-import CastingOverlay from "@/components/CastingOverlay";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
+import { FeatCastIcon, FeatPairIcon } from "@/components/FlatIcons";
 import OrnamentTitle from "@/components/OrnamentTitle";
-import { PhoneOverlay } from "@/components/PhoneOverlay";
-import ProductGrid from "@/components/ProductGrid";
-import WuxingChart from "@/components/WuxingChart";
-import { calculateBazi } from "@/lib/bazi/engine";
-import { consumeCast, getOrCreateDeviceId, remainingCasts } from "@/lib/castQuota";
-import { recommendProducts } from "@/lib/recommend";
-import products from "@/data/products.json";
-import type { Product } from "@/lib/types";
+import ProductMasonry from "@/components/ProductMasonry";
+import { catalog } from "@/lib/catalog";
 import styles from "./Home.module.css";
 
-const DEFAULT_BIRTH: BirthValue = { year: 2000, month: 1, day: 1, hour: 0 };
-const BIRTH_KEY = "five-birth";
-const CAST_LIMIT_TOAST = "今日5次試用已結束，請明日再來";
-const TOAST_MS = 2400;
+const BANNER_SRC = "/shop/banner.jpg";
 
-function readBirth(): BirthValue | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = sessionStorage.getItem(BIRTH_KEY);
-    if (!raw) return null;
-    const value = JSON.parse(raw) as BirthValue;
-    if (
-      typeof value.year !== "number" ||
-      typeof value.month !== "number" ||
-      typeof value.day !== "number" ||
-      typeof value.hour !== "number"
-    ) {
-      return null;
-    }
-    return value;
-  } catch {
-    return null;
-  }
-}
-
-export default function HomePage() {
-  const [draft, setDraft] = useState<BirthValue>(DEFAULT_BIRTH);
-  const [birth, setBirth] = useState<BirthValue | null>(null);
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
-  const [ready, setReady] = useState(false);
-  const [casting, setCasting] = useState(false);
-  const [limitToastAt, setLimitToastAt] = useState(0);
-  const [deviceId, setDeviceId] = useState("");
-  const pendingBirth = useRef<BirthValue | null>(null);
+export default function ShopHomePage() {
+  const [bannerOk, setBannerOk] = useState(false);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    setDeviceId(getOrCreateDeviceId());
-    const saved = readBirth();
-    setDraft(saved ?? DEFAULT_BIRTH);
-    setBirth(saved ?? DEFAULT_BIRTH);
-    setReady(true);
+    const img = new Image();
+    img.onload = () => setBannerOk(true);
+    img.onerror = () => setBannerOk(false);
+    img.src = BANNER_SRC;
   }, []);
 
-  useEffect(() => {
-    if (!limitToastAt) return;
-    const timer = window.setTimeout(() => setLimitToastAt(0), TOAST_MS);
-    return () => window.clearTimeout(timer);
-  }, [limitToastAt]);
-
-  const showCastLimit = () => setLimitToastAt(Date.now());
-
-  const openPicker = () => {
-    if (remainingCasts() <= 0) {
-      showCastLimit();
-      return;
-    }
-    setPickerOpen(true);
-  };
-
-  const finishCasting = useCallback(() => {
-    const next = pendingBirth.current;
-    pendingBirth.current = null;
-    if (!next) {
-      setCasting(false);
-      return;
-    }
-    setBirth(next);
-    sessionStorage.setItem(BIRTH_KEY, JSON.stringify(next));
-    setCasting(false);
-  }, []);
-
-  const catalog = products as Product[];
-
-  const result = useMemo(() => {
-    if (!birth) return null;
-    try {
-      return calculateBazi(birth);
-    } catch {
-      return null;
-    }
-  }, [birth]);
-
-  const recs = useMemo(() => {
-    if (!result) return [];
-    return recommendProducts(catalog, result.useful, 4);
-  }, [catalog, result]);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return catalog;
+    return catalog.filter((p) => p.name.toLowerCase().includes(q));
+  }, [query]);
 
   return (
     <main className={styles.shell}>
-      <header className={styles.hero}>
-        <p className={styles.brand}>五行沉香</p>
-        <h1>依八字喜用，配一串沉香</h1>
-      </header>
+      <section
+        className={`${styles.intro} ${bannerOk ? styles.introHasImg : ""}`}
+        aria-label="店面介紹"
+      >
+        {bannerOk ? (
+          <img className={styles.introImg} src={BANNER_SRC} alt="店面介紹" />
+        ) : (
+          <div className={styles.introSlot} />
+        )}
+        <div className={styles.introCopy}>
+          <BrandLogo size="lg" light={bannerOk} />
+          <p className={styles.introBrand}>五行沉香</p>
+          <h1>依八字喜用，配一串沉香</h1>
+          <p className={styles.introHint}>{bannerOk ? "選香 · 排盤 · 把五行收在腕上" : "宣傳圖待上架"}</p>
+        </div>
+      </section>
 
-      {ready && !result && !casting && (
-        <section className={styles.empty}>
-          <p>請填寫出生年、月、日、時，即可查看五行命理與手串推薦</p>
-          <button type="button" onClick={openPicker}>
-            輸入出生時間
-          </button>
-        </section>
-      )}
+      <section className={styles.block} aria-label="五行排盤">
+        <div className={styles.blockHead}>
+          <OrnamentTitle size="lg">五行排盤</OrnamentTitle>
+        </div>
+        <div className={styles.feats}>
+          <Link href="/cast" className={styles.feat}>
+            <FeatCastIcon className={styles.featIcon} />
+            <strong className={styles.featName}>單人排盤</strong>
+            <p className={styles.featDesc}>依生辰看喜用，薦一串沉香</p>
+          </Link>
+          <Link href="/pair" className={styles.feat}>
+            <FeatPairIcon className={styles.featIcon} />
+            <strong className={styles.featName}>雙人合盤</strong>
+            <p className={styles.featDesc}>兩人八字對參，薦成對手串</p>
+          </Link>
+        </div>
+      </section>
 
-      {result && !casting && (
-        <>
-          <section className={styles.card}>
-            <div className={styles.cardHead}>
-              <h2>出生時間</h2>
-              <button type="button" className={styles.edit} onClick={openPicker}>
-                更改
-              </button>
-            </div>
-            <p className={styles.solar}>
-              {result.solarLabel} {result.lunarLabel}
-            </p>
-            <div className={styles.attr}>
-              <span>五行屬性</span>
-              <strong>
-                日主為{result.dayMaster}　屬{result.dayMasterDesc}　{result.strengthLabel}
-              </strong>
-            </div>
-          </section>
-
-          <section className={styles.plain}>
-            <div className={styles.ornamentHead}>
-              <OrnamentTitle size="lg">{result.strengthLabel}</OrnamentTitle>
-            </div>
-            <WuxingChart result={result} />
-            <button type="button" className={styles.q} onClick={() => setHelpOpen(true)} aria-label="說明">
-              ?
-            </button>
-          </section>
-
-          <ProductGrid items={recs} usefulLabel={result.usefulLabel} />
-          {deviceId ? (
-            <button
-              type="button"
-              className={styles.deviceFoot}
-              onClick={() => {
-                void navigator.clipboard.writeText(deviceId);
-              }}
-            >
-              裝置號 {deviceId}
+      <section className={styles.block} aria-label="熱門商品">
+        <div className={styles.blockHead}>
+          <OrnamentTitle size="lg">熱門商品</OrnamentTitle>
+        </div>
+        <label className={styles.search}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="1.8" />
+            <path d="M16 16.5 20 20.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="搜尋手串名稱"
+            enterKeyHint="search"
+            autoComplete="off"
+            aria-label="搜尋手串名稱"
+          />
+          {query ? (
+            <button type="button" className={styles.searchClear} onClick={() => setQuery("")} aria-label="清除">
+              ×
             </button>
           ) : null}
-        </>
-      )}
+        </label>
+        {filtered.length > 0 ? (
+          <ProductMasonry items={filtered} />
+        ) : (
+          <p className={styles.emptyShop}>沒有符合「{query.trim()}」的手串</p>
+        )}
+      </section>
 
-      {pickerOpen && (
-        <BirthPicker
-          value={draft}
-          onChange={setDraft}
-          onClose={() => setPickerOpen(false)}
-          onConfirm={() => {
-            if (!consumeCast()) {
-              setPickerOpen(false);
-              showCastLimit();
-              return;
-            }
-            pendingBirth.current = draft;
-            setPickerOpen(false);
-            setCasting(true);
-          }}
-        />
-      )}
-
-      {casting && <CastingOverlay onDone={finishCasting} />}
-
-      {helpOpen && (
-        <PhoneOverlay>
-        <div className={styles.mask} onClick={() => setHelpOpen(false)} role="presentation">
-          <div className={styles.pop} onClick={(e) => e.stopPropagation()} role="dialog">
-            <p>
-              命盤結果僅供參考，個人運勢高低與影響仍需綜合判斷。此處計算僅供娛樂與飾品搭配建議，不構成任何主張。請理性看待，並相信科學。
-            </p>
-            <button type="button" className={styles.ok} onClick={() => setHelpOpen(false)}>
-              了解
-            </button>
-          </div>
-        </div>
-        </PhoneOverlay>
-      )}
-      {limitToastAt > 0 && (
-        <PhoneOverlay>
-          <div className={styles.toastLayer} role="status" style={{ pointerEvents: "none" }}>
-            <p className={styles.toast}>{CAST_LIMIT_TOAST}</p>
-          </div>
-        </PhoneOverlay>
-      )}
+      <p className={styles.madeBy}>
+        <BrandLogo size="sm" />
+        <span>本店出品</span>
+      </p>
     </main>
   );
 }

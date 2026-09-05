@@ -1,0 +1,50 @@
+.wrap {
+  position: relative;
+  margin: 8px -4px 6px;
+  min-height: 276px;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.badges {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.badge {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 72px;
+  transform: translate(-50%, -50%);
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  background: transparent;
+}
+
+.caption {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  font-family: "PingFang SC", "Noto Sans SC", "Hiragino Sans GB", sans-serif;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.caption b {
+  margin-left: 3px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

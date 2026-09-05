@@ -57,6 +57,17 @@ export const STEM_LABEL: Record<string, string> = {
   癸: "陰水",
 };
 
+/**
+ * 子平日主定五行（市面八字／合盤主流，寫死天干對照）：
+ * 用出生日的天干，不用出生年納音。
+ * 甲乙木、丙丁火、戊己土、庚辛金、壬癸水。
+ */
+export function personWuxingFromDayGan(dayGan: string): Wuxing {
+  const el = STEM_WUXING[dayGan];
+  if (!el) throw new Error(`未知日干: ${dayGan}`);
+  return el;
+}
+
 /** 我生：木→火→土→金→水→木 */
 export const SHENG: Record<Wuxing, Wuxing> = {
   wood: "fire",
