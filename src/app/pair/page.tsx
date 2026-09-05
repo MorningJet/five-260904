@@ -24,7 +24,7 @@ import styles from "./Pair.module.css";
 
 const DEFAULT_BIRTH: BirthValue = { year: 2000, month: 1, day: 1, hour: 0 };
 const STORE_KEY = "five-hepan";
-const CAST_LIMIT_TOAST = "今日5次試用已結束，請明日再來";
+const CAST_LIMIT_TOAST = "今日雙人合盤 15 次試用已結束，請明日再來";
 const TOAST_MS = 2400;
 const PAIR_STEPS = [
   "正在對參雙方日主與月令……",
@@ -98,14 +98,14 @@ export default function PairPage() {
   useEffect(() => {
     if (!ready || birthA || autoA.current) return;
     autoA.current = true;
-    if (remainingCasts() <= 0) return;
+    if (remainingCasts("pair") <= 0) return;
     setWho("a");
   }, [ready, birthA]);
 
   useEffect(() => {
     if (!ready || !birthA || birthB || autoB.current) return;
     autoB.current = true;
-    if (remainingCasts() <= 0) return;
+    if (remainingCasts("pair") <= 0) return;
     setWho("b");
   }, [ready, birthA, birthB]);
 
@@ -118,7 +118,7 @@ export default function PairPage() {
   const showCastLimit = () => setLimitToastAt(Date.now());
 
   const openWho = (next: "a" | "b") => {
-    if (remainingCasts() <= 0) {
+    if (remainingCasts("pair") <= 0) {
       showCastLimit();
       return;
     }
@@ -321,7 +321,7 @@ export default function PairPage() {
               return;
             }
             if (!nextA || !nextB) return;
-            if (!consumeCast()) {
+            if (!consumeCast("pair")) {
               showCastLimit();
               return;
             }
@@ -366,7 +366,7 @@ export default function PairPage() {
                     setRelation(draftRel);
                     return;
                   }
-                  if (!consumeCast()) {
+                  if (!consumeCast("pair")) {
                     showCastLimit();
                     return;
                   }

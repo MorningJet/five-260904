@@ -2,12 +2,23 @@ import { WHITELIST_DEVICE_IDS } from "./whitelist";
 
 export const CAST_QUOTA_KEY = "five-cast-quota";
 export const DEVICE_ID_KEY = "five-device-id";
-export const DAILY_CAST_LIMIT = 5;
+
+export type CastKind = "solo" | "pair";
+
+export const DAILY_CAST_LIMITS: Record<CastKind, number> = {
+  solo: 5,
+  pair: 15,
+};
+
+/** @deprecated 請用 DAILY_CAST_LIMITS.solo */
+export const DAILY_CAST_LIMIT = DAILY_CAST_LIMITS.solo;
 
 export type QuotaStorage = {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
 };
+
+type QuotaState = { date: string; solo: number; pair: number };
 
 export function taipeiDateKey(now: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", {
@@ -27,16 +38,24 @@ function browserStorage(): QuotaStorage | null {
   }
 }
 
-function readState(storage: QuotaStorage | null): { date: string; count: number } | null {
+function asCount(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+function readState(storage: QuotaStorage | null): QuotaState | null {
   if (!storage) return null;
   try {
     const raw = storage.getItem(CAST_QUOTA_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { date?: unknown; count?: unknown };
-    if (typeof parsed.date !== "string" || typeof parsed.count !== "number" || !Number.isFinite(parsed.count)) {
-      return null;
+    const parsed = JSON.parse(raw) as { date?: unknown; count?: unknown; solo?: unknown; pair?: unknown };
+    if (typeof parsed.date !== "string") return null;
+    if (typeof parsed.solo === "number" || typeof parsed.pair === "number") {
+      return { date: parsed.date, solo: asCount(parsed.solo), pair: asCount(parsed.pair) };
     }
-    return { date: parsed.date, count: parsed.count };
+    if (typeof parsed.count === "number" && Number.isFinite(parsed.count)) {
+      return { date: parsed.date, solo: asCount(parsed.count), pair: 0 };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -72,18 +91,21 @@ export function isWhitelisted(
 }
 
 export function remainingCasts(
+  kind: CastKind,
   now: Date = new Date(),
   storage: QuotaStorage | null = browserStorage(),
   allowList: readonly string[] = WHITELIST_DEVICE_IDS,
 ): number {
-  if (isWhitelisted(storage, allowList)) return DAILY_CAST_LIMIT;
+  const limit = DAILY_CAST_LIMITS[kind];
+  if (isWhitelisted(storage, allowList)) return limit;
   const today = taipeiDateKey(now);
   const state = readState(storage);
-  if (!state || state.date !== today) return DAILY_CAST_LIMIT;
-  return Math.max(0, DAILY_CAST_LIMIT - state.count);
+  if (!state || state.date !== today) return limit;
+  return Math.max(0, limit - state[kind]);
 }
 
 export function consumeCast(
+  kind: CastKind,
   now: Date = new Date(),
   storage: QuotaStorage | null = browserStorage(),
   allowList: readonly string[] = WHITELIST_DEVICE_IDS,
@@ -92,8 +114,10 @@ export function consumeCast(
   if (isWhitelisted(storage, allowList)) return true;
   const today = taipeiDateKey(now);
   const state = readState(storage);
-  const count = state && state.date === today ? state.count : 0;
-  if (count >= DAILY_CAST_LIMIT) return false;
-  storage.setItem(CAST_QUOTA_KEY, JSON.stringify({ date: today, count: count + 1 }));
+  const base: QuotaState =
+    state && state.date === today ? state : { date: today, solo: 0, pair: 0 };
+  if (base[kind] >= DAILY_CAST_LIMITS[kind]) return false;
+  const next: QuotaState = { ...base, date: today, [kind]: base[kind] + 1 };
+  storage.setItem(CAST_QUOTA_KEY, JSON.stringify(next));
   return true;
 }

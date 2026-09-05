@@ -18,7 +18,7 @@ import styles from "./Cast.module.css";
 
 const DEFAULT_BIRTH: BirthValue = { year: 2000, month: 1, day: 1, hour: 0 };
 const BIRTH_KEY = "five-birth";
-const CAST_LIMIT_TOAST = "今日5次試用已結束，請明日再來";
+const CAST_LIMIT_TOAST = "今日單人排盤 5 次試用已結束，請明日再來";
 const TOAST_MS = 2400;
 
 function readBirth(): BirthValue | null {
@@ -65,7 +65,7 @@ export default function CastPage() {
   useEffect(() => {
     if (!ready || birth || autoOpened.current) return;
     autoOpened.current = true;
-    if (remainingCasts() <= 0) return;
+    if (remainingCasts("solo") <= 0) return;
     setPickerOpen(true);
   }, [ready, birth]);
 
@@ -78,7 +78,7 @@ export default function CastPage() {
   const showCastLimit = () => setLimitToastAt(Date.now());
 
   const openPicker = () => {
-    if (remainingCasts() <= 0) {
+    if (remainingCasts("solo") <= 0) {
       showCastLimit();
       return;
     }
@@ -198,7 +198,7 @@ export default function CastPage() {
           onChange={setDraft}
           onClose={() => setPickerOpen(false)}
           onConfirm={() => {
-            if (!consumeCast()) {
+            if (!consumeCast("solo")) {
               setPickerOpen(false);
               showCastLimit();
               return;
