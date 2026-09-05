@@ -6,7 +6,7 @@
     "dev": "next dev --port 3000",
     "build": "next build",
     "start": "next start --port 3000",
-    "test": "tsx --test src/lib/bazi/engine.test.ts src/lib/recommend.test.ts src/lib/castQuota.test.ts src/lib/hepan/hepan.test.ts"
+    "test": "tsx --test src/lib/bazi/engine.test.ts src/lib/recommend.test.ts src/lib/castQuota.test.ts src/lib/hepan/hepan.test.ts src/lib/chartReading.test.ts"
   },
   "dependencies": {
     "lucide-react": "^1.41.0",

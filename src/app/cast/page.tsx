@@ -7,6 +7,7 @@ import BirthPicker, { type BirthValue } from "@/components/BirthPicker";
 import CastingOverlay from "@/components/CastingOverlay";
 import OrnamentTitle from "@/components/OrnamentTitle";
 import { PhoneOverlay } from "@/components/PhoneOverlay";
+import ChartReading from "@/components/ChartReading";
 import ProductGrid from "@/components/ProductGrid";
 import WuxingChart from "@/components/WuxingChart";
 import { calculateBazi } from "@/lib/bazi/engine";
@@ -178,6 +179,7 @@ export default function CastPage() {
           </section>
 
           <ProductGrid items={recs} usefulLabel={result.usefulLabel} />
+          <ChartReading useful={result.useful} />
           {deviceId ? (
             <button
               type="button"
