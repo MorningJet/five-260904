@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import BannerCarousel from "@/components/BannerCarousel";
-import BrandLogo from "@/components/BrandLogo";
 import { FeatCastIcon, FeatPairIcon } from "@/components/FlatIcons";
 import OrnamentTitle from "@/components/OrnamentTitle";
 import ProductMasonry from "@/components/ProductMasonry";
@@ -76,11 +75,6 @@ export default function ShopHomePage() {
           <p className={styles.emptyShop}>沒有符合「{query.trim()}」的手串</p>
         )}
       </section>
-
-      <p className={styles.madeBy}>
-        <BrandLogo size="sm" />
-        <span>本店出品</span>
-      </p>
     </main>
   );
 }

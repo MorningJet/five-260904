@@ -91,6 +91,17 @@ export default function PhoneShell({ children }: { children: ReactNode }) {
           <div className={styles.island} aria-hidden />
           <div className={styles.screen}>
             <div className={styles.scroll}>{children}</div>
+            <button
+              type="button"
+              className={styles.powered}
+              onClick={() => {
+                if (appDeviceId) void navigator.clipboard.writeText(appDeviceId);
+              }}
+              title={appDeviceId ? "點一下即可複製裝置號" : undefined}
+            >
+              Powered by 珠珠客製
+              {appDeviceId ? <span>裝置號 {appDeviceId}</span> : null}
+            </button>
             <div className={styles.overlayRoot} ref={setOverlayRoot} />
           </div>
         </div>

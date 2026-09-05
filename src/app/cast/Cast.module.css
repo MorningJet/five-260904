@@ -201,21 +201,6 @@
   width: 100%;
 }
 
-.deviceFoot {
-  display: block;
-  width: 100%;
-  margin: 18px 0 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #9a8b78;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  line-height: 1.4;
-  text-align: center;
-  cursor: pointer;
-}
-
 .toastLayer {
   position: absolute;
   inset: 0;

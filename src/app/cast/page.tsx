@@ -11,7 +11,7 @@ import ChartReading from "@/components/ChartReading";
 import ProductGrid from "@/components/ProductGrid";
 import WuxingChart from "@/components/WuxingChart";
 import { calculateBazi } from "@/lib/bazi/engine";
-import { consumeCast, getOrCreateDeviceId, remainingCasts } from "@/lib/castQuota";
+import { consumeCast, remainingCasts } from "@/lib/castQuota";
 import { recommendProducts } from "@/lib/recommend";
 import products from "@/data/products.json";
 import type { Product } from "@/lib/types";
@@ -51,12 +51,10 @@ export default function CastPage() {
   const [ready, setReady] = useState(false);
   const [casting, setCasting] = useState(false);
   const [limitToastAt, setLimitToastAt] = useState(0);
-  const [deviceId, setDeviceId] = useState("");
   const pendingBirth = useRef<BirthValue | null>(null);
   const autoOpened = useRef(false);
 
   useEffect(() => {
-    setDeviceId(getOrCreateDeviceId());
     const saved = readBirth();
     setDraft(saved ?? DEFAULT_BIRTH);
     setBirth(saved);
@@ -180,17 +178,6 @@ export default function CastPage() {
 
           <ProductGrid items={recs} usefulLabel={result.usefulLabel} />
           <ChartReading useful={result.useful} />
-          {deviceId ? (
-            <button
-              type="button"
-              className={styles.deviceFoot}
-              onClick={() => {
-                void navigator.clipboard.writeText(deviceId);
-              }}
-            >
-              裝置號 {deviceId}
-            </button>
-          ) : null}
         </>
       )}
 

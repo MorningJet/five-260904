@@ -199,13 +199,3 @@
   text-align: center;
 }
 
-.madeBy {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin: 18px 0 0;
-  color: #9a8b78;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-}

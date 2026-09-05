@@ -31,16 +31,11 @@ export default function ProductDetail({ product }: { product: Product }) {
         </span>
       </header>
 
-      <div className={styles.heroWrap}>
-        <img
-          className={styles.hero}
-          src={encodeURI(product.image)}
-          alt={`${product.name} 沉香手串`}
-        />
-        <span className={styles.brandMark}>
-          <BrandLogo size="sm" mark />
-        </span>
-      </div>
+      <img
+        className={styles.hero}
+        src={encodeURI(product.image)}
+        alt={`${product.name} 沉香手串`}
+      />
 
       <section className={styles.card}>
         <OrnamentTitle size="lg">{product.name}</OrnamentTitle>

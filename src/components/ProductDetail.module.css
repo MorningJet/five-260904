@@ -26,10 +26,6 @@
   color: var(--cinnabar);
 }
 
-.heroWrap {
-  position: relative;
-}
-
 .hero {
   width: 100%;
   aspect-ratio: 1;
@@ -37,12 +33,6 @@
   display: block;
   border-radius: 18px;
   background: #f3ebe0;
-}
-
-.brandMark {
-  position: absolute;
-  top: 10px;
-  right: 10px;
 }
 
 .card {

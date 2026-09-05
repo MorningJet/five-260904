@@ -13,7 +13,7 @@ import { WUXING_LABEL, WUXING_THEME } from "@/lib/bazi/constants";
 import type { BaziResult } from "@/lib/bazi/types";
 import { calculateBazi } from "@/lib/bazi/engine";
 import { formatBirthDay } from "@/lib/date";
-import { consumeCast, getOrCreateDeviceId, remainingCasts } from "@/lib/castQuota";
+import { consumeCast, remainingCasts } from "@/lib/castQuota";
 import { calculateHepan, hepanUsefulLabel } from "@/lib/hepan/engine";
 import { scoreHepanRadar } from "@/lib/hepan/radar";
 import { recommendPairs } from "@/lib/hepan/recommend";
@@ -77,13 +77,11 @@ export default function PairPage() {
   const [ready, setReady] = useState(false);
   const [casting, setCasting] = useState(false);
   const [limitToastAt, setLimitToastAt] = useState(0);
-  const [deviceId, setDeviceId] = useState("");
   const pending = useRef<Saved | null>(null);
   const autoA = useRef(false);
   const autoB = useRef(false);
 
   useEffect(() => {
-    setDeviceId(getOrCreateDeviceId());
     const saved = readSaved();
     if (saved) {
       setRelation(saved.relation);
@@ -287,17 +285,6 @@ export default function PairPage() {
             leftElement={resultA.dayMasterElement}
             rightElement={resultB.dayMasterElement}
           />
-          {deviceId ? (
-            <button
-              type="button"
-              className={styles.deviceFoot}
-              onClick={() => {
-                void navigator.clipboard.writeText(deviceId);
-              }}
-            >
-              裝置號 {deviceId}
-            </button>
-          ) : null}
         </>
       )}
 
