@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
+import BannerCarousel from "@/components/BannerCarousel";
 import BrandLogo from "@/components/BrandLogo";
 import { FeatCastIcon, FeatPairIcon } from "@/components/FlatIcons";
 import OrnamentTitle from "@/components/OrnamentTitle";
@@ -9,18 +10,8 @@ import ProductMasonry from "@/components/ProductMasonry";
 import { catalog } from "@/lib/catalog";
 import styles from "./Home.module.css";
 
-const BANNER_SRC = "/shop/banner.jpg";
-
 export default function ShopHomePage() {
-  const [bannerOk, setBannerOk] = useState(false);
   const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => setBannerOk(true);
-    img.onerror = () => setBannerOk(false);
-    img.src = BANNER_SRC;
-  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -30,37 +21,27 @@ export default function ShopHomePage() {
 
   return (
     <main className={styles.shell}>
-      <section
-        className={`${styles.intro} ${bannerOk ? styles.introHasImg : ""}`}
-        aria-label="店面介紹"
-      >
-        {bannerOk ? (
-          <img className={styles.introImg} src={BANNER_SRC} alt="店面介紹" />
-        ) : (
-          <div className={styles.introSlot} />
-        )}
-        <div className={styles.introCopy}>
-          <BrandLogo size="lg" light={bannerOk} />
-          <p className={styles.introBrand}>五行沉香</p>
-          <h1>依八字喜用，配一串沉香</h1>
-          <p className={styles.introHint}>{bannerOk ? "選香 · 排盤 · 把五行收在腕上" : "宣傳圖待上架"}</p>
-        </div>
-      </section>
+      <h1 className={styles.srOnly}>五行沉香</h1>
+      <BannerCarousel />
 
       <section className={styles.block} aria-label="五行排盤">
         <div className={styles.blockHead}>
           <OrnamentTitle size="lg">五行排盤</OrnamentTitle>
         </div>
         <div className={styles.feats}>
-          <Link href="/cast" className={styles.feat}>
-            <FeatCastIcon className={styles.featIcon} />
+          <Link href="/cast" className={styles.feat} aria-label="單人排盤">
+            <span className={styles.featIconSlot}>
+              <FeatCastIcon className={styles.featIcon} />
+            </span>
+            <span className={styles.featRule} aria-hidden />
             <strong className={styles.featName}>單人排盤</strong>
-            <p className={styles.featDesc}>依生辰看喜用，薦一串沉香</p>
           </Link>
-          <Link href="/pair" className={styles.feat}>
-            <FeatPairIcon className={styles.featIcon} />
+          <Link href="/pair" className={styles.feat} aria-label="雙人合盤">
+            <span className={styles.featIconSlot}>
+              <FeatPairIcon className={`${styles.featIcon} ${styles.featIconPair}`} />
+            </span>
+            <span className={styles.featRule} aria-hidden />
             <strong className={styles.featName}>雙人合盤</strong>
-            <p className={styles.featDesc}>兩人八字對參，薦成對手串</p>
           </Link>
         </div>
       </section>

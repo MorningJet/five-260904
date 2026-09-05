@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
-import { AxisGlyph } from "@/components/FlatIcons";
+import RadarAxisIcon from "@/components/RadarAxisIcon";
 import { AXIS_ICON, AXIS_ICON_FALLBACK } from "@/lib/hepan/axisIcons";
 import type { RadarAxis } from "@/lib/hepan/radar";
 import styles from "./HepanRadar.module.css";
 
 const CX = 180;
-const CY = 148;
-const RING = 88;
+const CY = 134;
+const RING = 80;
 const START = -Math.PI / 2;
 
 function pt(i: number, n: number, r: number) {
@@ -14,10 +14,20 @@ function pt(i: number, n: number, r: number) {
   return { x: CX + r * Math.cos(a), y: CY + r * Math.sin(a) };
 }
 
+function axisPlace(i: number): "peak" | "side" {
+  if (i === 0 || i === 2 || i === 3) return "peak";
+  return "side";
+}
+
 function badgeStyle(i: number, n: number): CSSProperties {
   const a = START + (i * 2 * Math.PI) / n;
-  const x = 50 + 34 * Math.cos(a);
-  const y = 50 + 38 * Math.sin(a);
+  const x = 50 + 33 * Math.cos(a);
+  let y = 50 + 33 * Math.sin(a);
+  if (i === 0) {
+    y = 6;
+  } else if (i === 2 || i === 3) {
+    y += 11;
+  }
   return { left: `${x}%`, top: `${y}%` };
 }
 
@@ -28,7 +38,7 @@ export default function HepanRadar({ axes }: { axes: RadarAxis[] }) {
 
   return (
     <div className={styles.wrap}>
-      <svg viewBox="0 20 360 256" className={styles.svg} role="img" aria-label="合盤雷達圖">
+      <svg viewBox="0 24 360 216" className={styles.svg} role="img" aria-label="合盤雷達圖">
         {rings.map((t) => {
           const pts = axes.map((_, i) => pt(i, n, RING * t));
           return (
@@ -69,9 +79,10 @@ export default function HepanRadar({ axes }: { axes: RadarAxis[] }) {
       <div className={styles.badges}>
         {axes.map((axis, i) => {
           const icon = AXIS_ICON[axis.label] ?? AXIS_ICON_FALLBACK;
+          const place = axisPlace(i);
           return (
-            <div key={axis.key} className={styles.badge} style={badgeStyle(i, n)}>
-              <AxisGlyph kind={icon.kind} color={icon.color} className={styles.icon} />
+            <div key={axis.key} className={`${styles.badge} ${styles[place]}`} style={badgeStyle(i, n)}>
+              <RadarAxisIcon name={icon.name} color={icon.color} className={styles.icon} />
               <span className={styles.caption} style={{ color: icon.color }}>
                 {axis.label}
                 <b>{axis.score}</b>

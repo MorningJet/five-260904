@@ -63,7 +63,7 @@
 .name {
   position: absolute;
   left: 50%;
-  bottom: 5px;
+  bottom: 0;
   top: auto;
   transform: translateX(-50%);
   margin: 0;

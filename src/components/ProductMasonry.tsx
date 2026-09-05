@@ -5,12 +5,10 @@ import { formatPrice } from "@/lib/date";
 import type { Product } from "@/lib/types";
 import styles from "./ProductMasonry.module.css";
 
-const RATIOS = ["1", "4 / 5", "5 / 6"] as const;
-
 export default function ProductMasonry({ items }: { items: Product[] }) {
   return (
     <div className={styles.fall}>
-      {items.map((p, i) => (
+      {items.map((p) => (
         <article key={p.id} className={styles.card}>
           <Link href={`/product/${p.id}`} className={styles.link}>
             <span className={styles.photoWrap}>
@@ -19,7 +17,6 @@ export default function ProductMasonry({ items }: { items: Product[] }) {
                 src={encodeURI(p.image)}
                 alt={`${p.name} 沉香手串`}
                 loading="lazy"
-                style={{ aspectRatio: RATIOS[i % RATIOS.length] }}
               />
               <span className={styles.brandMark}>
                 <BrandLogo size="sm" mark />

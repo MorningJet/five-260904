@@ -1,0 +1,133 @@
+.wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  margin-bottom: 16px;
+  background: #efe0c8;
+}
+
+.viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+.anim {
+  transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  object-position: 70% center;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  background: #f3ebe0;
+}
+
+.copy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 18px 28px;
+  pointer-events: none;
+}
+
+.dark {
+  background: linear-gradient(90deg, rgba(28, 20, 14, 0.72) 0%, rgba(28, 20, 14, 0.28) 52%, transparent 78%);
+  color: #fbf6ec;
+}
+
+.light {
+  background: linear-gradient(90deg, rgba(251, 246, 236, 0.88) 0%, rgba(251, 246, 236, 0.42) 48%, transparent 76%);
+  color: #2a2218;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  line-height: 1.2;
+}
+
+.dark .kicker {
+  color: #f0c4bc;
+}
+
+.light .kicker {
+  color: #9a3b2f;
+}
+
+.title {
+  margin: 10px 0 0;
+  max-width: 13.5em;
+  font-family: "Noto Serif TC", "Songti TC", serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.32;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+}
+
+.dark .hint {
+  color: rgba(251, 246, 236, 0.9);
+}
+
+.light .hint {
+  color: #5c5144;
+}
+
+.dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.dot {
+  pointer-events: auto;
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(42, 34, 24, 0.28);
+  cursor: pointer;
+}
+
+.dotOn {
+  width: 16px;
+  background: rgba(154, 59, 47, 0.88);
+}
