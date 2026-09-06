@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Analytics } from "@vercel/analytics/next";
 import PhoneShell from "@/components/PhoneShell";
 import "./layout.css";
 
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body>
         <PhoneShell>{children}</PhoneShell>
+        <Analytics />
       </body>
     </html>
   );
